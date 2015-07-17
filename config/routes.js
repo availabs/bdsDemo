@@ -22,6 +22,6 @@
 
 module.exports.routes = {
 
-  '/': 'HelloController.index'
+  '/': 'DemoController.index'
 
   };

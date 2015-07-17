@@ -7,14 +7,14 @@ if (process.env.NODE_ENV === 'development') {
 
     webpackConfig = {
         devtool: 'eval',
-        entry: [
+        entry: {bundle:[
           'webpack-dev-server/client?http://localhost:11235',
           'webpack/hot/only-dev-server',
           './assets/react/indexView.jsx',
-        ],
+        ]},
         output: {
           path: path.join(__dirname, '.tmp/public'),
-          filename: 'bundle.js',
+          filename: '[name].js',
           //crossOriginLoading: "use-credentials",
           publicPath: 'http://localhost:11235/',
         },
