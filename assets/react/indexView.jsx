@@ -7,18 +7,21 @@ var React = require("react"),
     Routes = Router.Routes,
     Redirect = Router.Redirect,
     DefaultRoute = Router.DefaultRoute,
+
+    SailsWebApi = require("./utils/api/SailsWebApi.react"),
 // Layout
 	App = require("./pages/layout.react"),
 // Components
 	Hello = require("./pages/Hello.react"),
-    BirthDeathMap = require("./pages/BirthDeathMap.react");
+    DemoOne = require("./pages/DemoOne.react");
 
-console.log("in indexView.jsx");
+SailsWebApi.init();
+
 var routes = (
 	<Route name="app" path="/" handler={App}>
 		<Route name="hello" path="/hello" handler={Hello} />
-        <Route name="map" path="/map" handler={BirthDeathMap} />
-		<DefaultRoute handler={BirthDeathMap} />
+        <Route name="demo1" path="/demo1" handler={DemoOne} />
+		<DefaultRoute handler={DemoOne} />
 	</Route>
 );
 

@@ -4,8 +4,8 @@
  *
  */
 
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var Constants = require('../constants/AppConstants');
+var AppDispatcher = require("../dispatcher/AppDispatcher");
+var Constants = require("../constants/AppConstants");
 
 var ActionTypes = Constants.ActionTypes;
 

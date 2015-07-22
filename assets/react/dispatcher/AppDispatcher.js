@@ -1,8 +1,9 @@
 var Dispatcher = require('flux').Dispatcher;
 
-var copyProperties = require('react/lib/copyProperties');
+var assign = require("object-assign");
+// var copyProperties = require('react/lib/copyProperties');
 
-var AppDispatcher = copyProperties(new Dispatcher(), {
+var AppDispatcher = assign(new Dispatcher(), {
 
   /**
    * @param {object} action The details of the action, including the action's

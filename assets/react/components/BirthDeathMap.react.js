@@ -1,5 +1,5 @@
 var React = require("react"),
-    LeafletMap = require('../components/utils/LeafletMap.react');
+    LeafletMap = require("./utils/LeafletMap.react");
 
 var BirthDeathMap = React.createClass({
     processLayers() {
@@ -40,7 +40,7 @@ var BirthDeathMap = React.createClass({
                                     weight: 0.5,
                                     opacity: 0.3,
                                     fillOpacity: 0.4,
-                                    className:'zipcode'
+                                    className:"bds"
                                 };
                             }
                         }
@@ -51,8 +51,11 @@ var BirthDeathMap = React.createClass({
     render() {
         return (
             <div>
-                <LeafletMap layers={this.processLayers()} height="100%" />
+                <p>BirthDeathMap</p>
             </div>
         );
+        // <LeafletMap layers={this.processLayers()} height="100%" />
     }
 });
+
+module.exports = BirthDeathMap;

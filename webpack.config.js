@@ -24,15 +24,23 @@ if (process.env.NODE_ENV === 'development') {
           new webpack.optimize.OccurenceOrderPlugin(),
         ],
         resolve: {
-          extensions: ['', '.js', '.jsx']
+          extensions: ['', '.js', '.jsx', '.json']
         },
         watch:true,
         module: {
           loaders: [{
             test: /\.jsx?$|react\.js/,
             loaders: ['react-hot', 'babel'],
-            include: path.join(__dirname, 'assets')
-          }]
+            include: path.join(__dirname, 'assets'),
+            exclude: /sails\.io\.js$|node_modules/
+          },
+          { test: /\.json$/, loader: "json-loader" }]
+        },
+        node: { // https://github.com/webpack/react-starter/issues/3
+            console: true,
+            net: "empty",
+            tls: "empty",
+            fs: "empty"
         }
     };
 
@@ -41,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
     webpackConfig = {
 
         entry: './assets/react/indexView.jsx',
-        
+
         output: {
           path: path.join(__dirname, '.tmp/public'),
           filename: 'bundle.js',

@@ -12,7 +12,7 @@ var ActionTypes = Constants.ActionTypes;
 
 module.exports = {
 
-  setCurrentZipcode: function(data) {
+  /*setCurrentZipcode: function(data) {
     // console.log("Setting current zipcode to", data)
     AppDispatcher.handleViewAction({
       type: ActionTypes.SET_CURRENT_ZIPCODE,
@@ -28,7 +28,7 @@ module.exports = {
   	});
   	SailsWebApi.updateNaics(data);
   },
-  setCurrentVariable: function(data) { 
+  setCurrentVariable: function(data) {
     AppDispatcher.handleViewAction({
       type:ActionTypes.SET_CURRENT_VAR,
       variable: data
@@ -47,6 +47,6 @@ module.exports = {
   },
   initZip: function(type) {
     SailsWebApi.initZip();
-  }
+  }*/
 
 };
