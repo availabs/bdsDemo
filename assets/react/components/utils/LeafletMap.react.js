@@ -22,7 +22,7 @@ var Map = React.createClass({
         return {
             height : '500px',
             ToolTip : {display:'none'},
-            layerrs :{}
+            layers :{}
         }
     },
 
@@ -78,6 +78,7 @@ var Map = React.createClass({
     },
 
     renderMap:function(){
+        console.log(this.props);
         var scope = this;
         var mapDiv = document.getElementById('map');
         mapDiv.setAttribute("style","height:"+this.props.height);
@@ -92,22 +93,23 @@ var Map = React.createClass({
           attributionControl:false
         });
 
-        Object.keys(this.props.layers).forEach(function(key){
+        if(this.props.layers) {
+            Object.keys(this.props.layers).forEach(function(key){
 
-            var currLayer = scope.props.layers[key];
-            layers[key] =  {
-                id:currLayer.id,
-                layer: L.geoJson(currLayer.geo,currLayer.options)
-            };
+                var currLayer = scope.props.layers[key];
+                layers[key] =  {
+                    id:currLayer.id,
+                    layer: L.geoJson(currLayer.geo,currLayer.options)
+                };
 
-            map.addLayer(layers[key].layer);
-            if(currLayer.options.zoomOnLoad && currLayer.geo.features.length > 0){
-                var ezBounds = d3.geo.bounds(currLayer.geo);
-                map.fitBounds(layers[key].layer.getBounds());
-            }
+                map.addLayer(layers[key].layer);
+                if(currLayer.options.zoomOnLoad && currLayer.geo.features.length > 0){
+                    var ezBounds = d3.geo.bounds(currLayer.geo);
+                    map.fitBounds(layers[key].layer.getBounds());
+                }
 
-        });
-
+            });
+        }
     }
 });
 

@@ -1,7 +1,7 @@
 var React = require('react');
 
 var ToolTip = React.createClass({
- 
+
 	getDefaultProps:function(){
 		return {
 			config:{
@@ -21,7 +21,7 @@ var ToolTip = React.createClass({
 
 
 	render: function() {
-		displayStyle  = {
+		let displayStyle  = {
 
 			position:'fixed',
 			left:this.props.config.x,
@@ -34,9 +34,9 @@ var ToolTip = React.createClass({
 			// width:this.props.size.width,
 			// height:this.props.size.height,
 			zIndex:100
-		
+
 		}
-		headerStyle = {
+		let headerStyle = {
 			fontWeight:700,
 			width:'100%',
 			color:'#000'

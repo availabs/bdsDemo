@@ -11,7 +11,7 @@ var ActionTypes = Constants.ActionTypes;
 
 module.exports = {
     receiveMapData(mapData) {
-        console.log("ServerActionsCreator receiving", mapData);
+        // console.log("ServerActionsCreator receiving", mapData);
         AppDispatcher.handleServerAction({
             type: ActionTypes.RECEIVE_MAP_DATA,
             mapData: mapData

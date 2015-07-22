@@ -9,12 +9,23 @@ var DemoOne = React.createClass({
             mapData: DemoStore.getMapData()
         }
     },
+    componentDidMount() {
+        DemoStore.addChangeListener(this._onChange);
+    },
+    componentWillUnmount() {
+        DemoStore.removeChangeListener(this._onChange);
+    },
+    _onChange() {
+        this.setState({
+            mapData: DemoStore.getMapData()
+        });
+    },
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         return (
             <div>
                 <h1>Demo One</h1>
-                <BirthDeathMap />
+                <BirthDeathMap data={this.state.mapData} />
             </div> );
     }
 });

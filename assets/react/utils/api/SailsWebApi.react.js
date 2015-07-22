@@ -22,8 +22,6 @@ module.exports = {
 
     mapData(fields) {
         let fStr = "?" + fields.map((row) => "fields=" + row).join("&");
-        var s = "http://localhost:1337/firm/st" + fStr;
-        console.log(s);
         io.socket.get("/firm/st" + fStr, (resData) => {
             console.log("resData", resData);
             ServerActionCreator.receiveMapData(resData);
