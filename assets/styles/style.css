@@ -2,3 +2,27 @@ body {
     background : black;
     color      : white;
 }
+
+.rangeslider,
+input[type='range'] {
+  max-width: 1100px;
+}
+
+.rangeslider__ruler {
+  cursor: pointer;
+  font-size: .7em;
+  margin: 20px 3px 0 3px;
+  position: relative;
+  top: 100%;
+  text-align: justify;
+}
+
+.rangeslider__ruler:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+}
+
+#yearSelect {
+    margin-top: 30px;
+}

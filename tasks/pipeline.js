@@ -17,7 +17,8 @@
 var cssFilesToInject = [
   'styles/**/*.css',
   'bower_components/leaflet/dist/leaflet.css',
-  'bower_components/bootstrap/dist/css/bootstrap.min.css'
+  'bower_components/bootstrap/dist/css/bootstrap.min.css',
+  'bower_components/rangeslider.js/dist/rangeslider.css'
 ];
 
 
@@ -33,6 +34,7 @@ var jsFilesToInject = [
 
   'bower_components/jquery/dist/jquery.js',
   'bower_components/bootstrap/dist/js/bootstrap.js',
+  'bower_components/rangeslider.js/dist/rangeslider.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.

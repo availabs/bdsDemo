@@ -16,9 +16,10 @@ var AppDispatcher = require("../dispatcher/AppDispatcher"),
 var _mapData = {};
 
 
-var zbpStore = assign({}, EventEmitter.prototype, {
+var demoStore = assign({}, EventEmitter.prototype, {
 
   emitChange() {
+    // console.log("DEMOSTORE EMITTING EVENT");
     this.emit(CHANGE_EVENT);
   },
 
@@ -39,19 +40,20 @@ var zbpStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-zbpStore.dispatchToken = AppDispatcher.register(function(payload) {
+demoStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
 
   switch(action.type) {
 
     /*case ActionTypes.RECEIVE_ZIPCODES:
       _zipcodeList = action.zipcodes.data;
-      zbpStore.emitChange();
+      demoStore.emitChange();
     break;
     */
-    case ActionTypes.RECEIVE_MAP_TYPES:
+    case ActionTypes.RECEIVE_MAP_DATA:
         _mapData = action.mapData;
-        zbpStore.emitChange();
+        // console.log("received mapdata!", _mapData);
+        demoStore.emitChange();
     break;
 
     default:
@@ -60,4 +62,4 @@ zbpStore.dispatchToken = AppDispatcher.register(function(payload) {
 
 });
 
-module.exports = zbpStore;
+module.exports = demoStore;

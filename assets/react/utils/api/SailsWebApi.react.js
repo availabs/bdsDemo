@@ -23,8 +23,22 @@ module.exports = {
     mapData(fields) {
         let fStr = "?" + fields.map((row) => "fields=" + row).join("&");
         io.socket.get("/firm/st" + fStr, (resData) => {
-            console.log("resData", resData);
-            ServerActionCreator.receiveMapData(resData);
+            // console.log("resData", resData);
+            /*let realData = Object.keys(resData).map((val, i) => {
+
+            });*/
+            let realData = {};
+            for(let prop in resData) {
+                // realData[prop]
+                realData[prop] = {};
+                for(let i of resData[prop]) {
+                    realData[prop][i["year2"]] = {
+                        "job_creation_births": i["job_creation_births"],
+                        "job_destruction_deaths": i["job_destruction_deaths"]
+                    }
+                }
+            }
+            ServerActionCreator.receiveMapData(realData);
         });
     }
 

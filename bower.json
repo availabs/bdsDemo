@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "leaflet": "~0.7.3"
+    "leaflet": "~0.7.3",
+    "rangeslider.js": "~1.2.2"
   }
 }

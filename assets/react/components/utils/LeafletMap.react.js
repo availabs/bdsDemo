@@ -7,10 +7,7 @@ var React = require('react'),
 
     //--Utils
     L = require('leaflet'),
-    d3 = require('d3'),
-    colorbrewer = require('colorbrewer'),
-    topojson = require('topojson');
-
+    d3 = require('d3');
 
 var map = null,
     layers = {};
@@ -38,10 +35,10 @@ var Map = React.createClass({
                 var currLayer = nextProps.layers[key];
                 if(layers[key]){
                     //if layer existed previously check version ids
-                    if(currLayer.id !== layers[key].id && currLayer.geo.features.length > 0){
+                    if(currLayer.id !== layers[key].id && currLayer.geo.length > 0){
                         scope._updateLayer(key,currLayer)
                     }
-                }else if(currLayer.geo.features.length > 0){
+                }else if(currLayer.geo.length > 0){
                     //layer is new and has features
                     scope._updateLayer(key,currLayer)
                 }else{
@@ -52,6 +49,7 @@ var Map = React.createClass({
     },
 
     _updateLayer : function(key,layer){
+        console.log(key, layer)
         if(map.hasLayer(layers[key].layer)){
             map.removeLayer(layers[key].layer)
         }
@@ -61,7 +59,7 @@ var Map = React.createClass({
         }
         layers[key].layer.addData(layer.geo); // to get layerAdd event
         map.addLayer(layers[key].layer);
-        if(layer.options.zoomOnLoad && layer.geo.features.length > 0){
+        if(layer.options.zoomOnLoad && layer.geo.length > 0){
             var ezBounds = d3.geo.bounds(layer.geo);
 
             map.fitBounds(layers[key].layer.getBounds());
@@ -93,23 +91,22 @@ var Map = React.createClass({
           attributionControl:false
         });
 
-        if(this.props.layers) {
-            Object.keys(this.props.layers).forEach(function(key){
+        Object.keys(this.props.layers).forEach(function(key){
+            console.log(key, scope.props.layers[key]);
+            var currLayer = scope.props.layers[key];
+            layers[key] =  {
+                id:currLayer.id,
+                layer: L.geoJson(currLayer.geo,currLayer.options)
+            };
+            // L.geoJson(currLayer.geo,currLayer.options).addTo(map);
+            map.addLayer(L.geoJson(currLayer.geo,currLayer.options));
+            // map.addLayer(layers[key].layer);
+            if(currLayer.options.zoomOnLoad && currLayer.geo.length > 0){
+                var ezBounds = d3.geo.bounds(currLayer.geo);
+                map.fitBounds(layers[key].layer.getBounds());
+            }
 
-                var currLayer = scope.props.layers[key];
-                layers[key] =  {
-                    id:currLayer.id,
-                    layer: L.geoJson(currLayer.geo,currLayer.options)
-                };
-
-                map.addLayer(layers[key].layer);
-                if(currLayer.options.zoomOnLoad && currLayer.geo.features.length > 0){
-                    var ezBounds = d3.geo.bounds(currLayer.geo);
-                    map.fitBounds(layers[key].layer.getBounds());
-                }
-
-            });
-        }
+        });
     }
 });
 
