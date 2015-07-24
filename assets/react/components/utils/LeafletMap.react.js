@@ -29,10 +29,12 @@ var Map = React.createClass({
 
     componentWillReceiveProps: function(nextProps) {
         var scope = this;
+        console.log("receive props");
         if(nextProps.layers){
-
             Object.keys(nextProps.layers).forEach(function(key){
                 var currLayer = nextProps.layers[key];
+                layers = nextProps.layers;
+                console.log(currLayer, key);
                 if(layers[key]){
                     //if layer existed previously check version ids
                     if(currLayer.id !== layers[key].id && currLayer.geo.length > 0){
@@ -50,6 +52,7 @@ var Map = React.createClass({
 
     _updateLayer : function(key,layer){
         console.log(key, layer)
+        console.log(layers);
         if(map.hasLayer(layers[key].layer)){
             map.removeLayer(layers[key].layer)
         }
@@ -99,14 +102,14 @@ var Map = React.createClass({
                 layer: L.geoJson(currLayer.geo,currLayer.options)
             };
             // L.geoJson(currLayer.geo,currLayer.options).addTo(map);
-            map.addLayer(L.geoJson(currLayer.geo,currLayer.options));
-            // map.addLayer(layers[key].layer);
+            // map.addLayer(L.geoJson(currLayer.geo,currLayer.options));
+            map.addLayer(layers[key].layer);
             if(currLayer.options.zoomOnLoad && currLayer.geo.length > 0){
                 var ezBounds = d3.geo.bounds(currLayer.geo);
                 map.fitBounds(layers[key].layer.getBounds());
             }
-
         });
+        console.log(map);
     }
 });
 

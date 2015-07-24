@@ -26,3 +26,22 @@ input[type='range'] {
 #yearSelect {
     margin-top: 30px;
 }
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.rangeslider__fill {
+    background-color: #00ff00;
+}
