@@ -1,8 +1,9 @@
 "use strict"
 var React = require("react"),
+    L = require("leaflet"),
     DemoStore = require("../stores/DemoStore.react"),
 
-    BirthDeathMap = require("../components/BirthDeathMap.react");
+    DataMap = require("../components/DataMap.react");
 
 var interval = null,
     inInterval = false;;
@@ -10,7 +11,11 @@ var interval = null,
 var DemoOne = React.createClass({
     getInitialState() {
         return {
-            mapData: DemoStore.getMapData(),
+            mapData: {
+                st: DemoStore.getMapData("st"),
+                msa: DemoStore.getMapData("msa")
+            },
+            geoType: "st",
             currYear: "1977"
         }
     },
@@ -39,9 +44,14 @@ var DemoOne = React.createClass({
         }
 
         $("#yearSlider").on("input", (e) => { // necessary b/c sliders don't go well with onchange
+            // console.log(e.target.value);
             $("#yearSelect").val(e.target.value);
             this.setState({
-                mapData: DemoStore.getMapData(),
+                mapData: {
+                    st: DemoStore.getMapData("st"),
+                    msa: DemoStore.getMapData("msa")
+                },
+                geoType: "st",
                 currYear: e.target.value
             });
             // console.log("yearSlider on");
@@ -61,15 +71,23 @@ var DemoOne = React.createClass({
     },
     _onChange() {
         this.setState({
-            mapData: DemoStore.getMapData(),
+            mapData: {
+                st: DemoStore.getMapData("st"),
+                msa: DemoStore.getMapData("msa")
+            },
+            geoType: "st",
             currYear: "1977"
         });
     },
     _onChangeYear(e) {
-        if( e.keyCode == 13 ) {
+        if( e.keyCode == 13 && parseInt(this.state.currYear) < 2013) {
             // console.log("_onChangeYear")
             this.setState({
-                mapData: DemoStore.getMapData(),
+                mapData: {
+                    st: DemoStore.getMapData("st"),
+                    msa: DemoStore.getMapData("msa")
+                },
+                geoType: "st",
                 currYear: e.target.value
             });
             $("#yearSlider").val(e.target.value).change();
@@ -97,16 +115,28 @@ var DemoOne = React.createClass({
             });*/
             interval = setInterval(() => {
                 inInterval = true;
-                if(parseInt(this.state.currYear) > 2012) {
+                if(parseInt(this.state.currYear) > 2011) {
                     clearInterval(interval);
                     interval = null;
                     inInterval = false;
                     $("#playpause").toggleClass("glyphicon-play");
                     $("#playpause").toggleClass("glyphicon-pause");
+                    this.setState({
+                            mapData: {
+                            st: DemoStore.getMapData("st"),
+                            msa: DemoStore.getMapData("msa")
+                        },
+                        geoType: "st",
+                        currYear: "2012"
+                    });
                 }
                 else {
                     this.setState({
-                        mapData: DemoStore.getMapData(),
+                        mapData: {
+                            st: DemoStore.getMapData("st"),
+                            msa: DemoStore.getMapData("msa")
+                        },
+                        geoType: "st",
                         currYear: (parseInt(this.state.currYear) + 1).toString()
                     });
                     $("#yearSlider").val(this.state.currYear).change();
@@ -116,14 +146,30 @@ var DemoOne = React.createClass({
         }
     },
     render() {
-        // console.log(this.state);
+        console.log("demo state", this.state);
+
         return (
-            <div>
+            <div className="container main">
                 <h1>Demo One</h1>
-                <BirthDeathMap data={this.state.mapData} currYear={this.state.currYear} />
-                <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
-                <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
-                <button type="button" onClick={this._handleClick} className="btn btn-default"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
+                <div className="row">
+                    <div className="col-md-12">
+                        <DataMap geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                    </div>
+                </div>
+                <div className="row controls">
+                    <div className="col-md-12">
+                        <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
+                        <div className="row">
+                            <div className="col-md-6">
+                                <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
+                                <button type="button" onClick={this._handleClick} className="btn btn-default playpause"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
+                            </div>
+                            <div className="col-md-6">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

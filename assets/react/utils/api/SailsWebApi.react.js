@@ -17,40 +17,36 @@ io.sails.url = 'http://localhost:1337'; // for API
 
 module.exports = {
     init() {
-        this.mapData(["job_creation_births", "job_destruction_deaths"]);
+        this.mapData("msa", ["job_creation_births", "job_destruction_deaths"]);
+        this.mapData("st", ["job_creation_births", "job_destruction_deaths"]);
     },
 
-    mapData(fields) {
+    // type: msa or st
+    mapData(type, fields) {
         let fStr = "?" + fields.map((row) => "fields=" + row).join("&");
-        io.socket.get("/firm/st" + fStr, (resData) => {
-            // console.log("resData", resData);
-            /*let realData = Object.keys(resData).map((val, i) => {
-
-            });*/
+        io.socket.get("/firm/" + type + "/yr" + fStr, (resData) => {
             let realData = {};
             for(let prop in resData) {
                 // realData[prop]
                 realData[prop] = {};
-                for(let i of resData[prop]) {
+                $.each(resData[prop], (_, i) => {
                     realData[prop][i["year2"]] = {
                         "job_creation_births": i["job_creation_births"],
                         "job_destruction_deaths": i["job_destruction_deaths"]
-                    }
-                }
+                    };
+                });
             }
-            ServerActionCreator.receiveMapData(realData);
+            // console.log(type, realData); this is working
+            ServerActionCreator.receiveMapData(type, realData);
         });
-    }
+    },
 
-  /*fipsTable: function(fipsType) {
-    if(fipsType === "metro") {
-      ServerActionCreators.receiveFips(fipsType, {});
+    statesGeo() {
+
+    },
+
+    msaGeo() {
+
     }
-    else {
-      io.socket.get("/" + fipsType + "fips", function(resData) {
-        ServerActionCreators.receiveFipsTable(fipsType, resData);
-      });
-    }
-  }*/
 
 };

@@ -94,6 +94,7 @@ var Map = React.createClass({
           attributionControl:false
         });
 
+
         Object.keys(this.props.layers).forEach(function(key){
             console.log(key, scope.props.layers[key]);
             var currLayer = scope.props.layers[key];

@@ -3,7 +3,7 @@ var React = require("react");
 var Header = React.createClass({
 	render() {
 		return (
-			<nav className="navbar navbar-inverse">
+			<nav className="navbar navbar-inverse" id="topNav">
 				<div className="container-fluid">
 					<div className="navbar-header">
 						<a className="navbar-brand" href="#">BDS Demo</a>

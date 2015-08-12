@@ -25,7 +25,6 @@ var BirthDeathMap = React.createClass({
             ).range(['rgb(103,0,31)','rgb(178,24,43)','rgb(214,96,77)','rgb(244,165,130)','rgb(253,219,199)','rgb(247,247,247)','rgb(209,229,240)','rgb(146,197,222)','rgb(67,147,195)','rgb(33,102,172)','rgb(5,48,97)']);
             */
 
-
             let dd = [];
             for(let id in this.props.data) { // should really use jquery.each
                 for(let yr in this.props.data[id]) {
@@ -101,9 +100,7 @@ var BirthDeathMap = React.createClass({
 
     },
     componentDidMount() {
-        var mapDiv = document.getElementById('map');
-        mapDiv.setAttribute("style","height: 400px");
-        var key = 'erickrans.4f9126ad',//am3081.kml65fk1,
+        var key = 'erickrans.4f9126ad',// am3081.kml65fk1, erickrans.4f9126ad
             mapquestOSM = L.tileLayer("http://{s}.tiles.mapbox.com/v3/"+key+"/{z}/{x}/{y}.png");
 
         map = L.map("map", {
@@ -113,7 +110,7 @@ var BirthDeathMap = React.createClass({
           zoomControl: true,
           attributionControl:false
         });
-
+        map.setView([39.0, -98], 4);
         let layer = this.processLayers();
 
         gj = L.geoJson(layer.geo, layer.options).addTo(map);
@@ -140,7 +137,7 @@ var BirthDeathMap = React.createClass({
         }
         // console.log(this.props, this.processLayers());
         return (
-            <div>
+            <div className="mapContainer">
                 <div id="map"></div>
             </div>
         );

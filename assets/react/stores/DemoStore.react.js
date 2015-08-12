@@ -35,8 +35,9 @@ var demoStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getMapData() {
-    return _mapData;
+  getMapData(type) {
+    console.log("_mapData, type", _mapData, type)
+    return _mapData[type];
   }
 });
 
@@ -51,8 +52,8 @@ demoStore.dispatchToken = AppDispatcher.register(function(payload) {
     break;
     */
     case ActionTypes.RECEIVE_MAP_DATA:
-        _mapData = action.mapData;
-        // console.log("received mapdata!", _mapData);
+        _mapData[action.geoType] = action.mapData;
+        // console.log("received mapdata!", action.geoType, action.mapData); // work
         demoStore.emitChange();
     break;
 

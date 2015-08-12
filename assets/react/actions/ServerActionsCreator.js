@@ -11,17 +11,13 @@ var Constants = require("../constants/AppConstants");
 var ActionTypes = Constants.ActionTypes;
 
 module.exports = {
-    receiveMapData(mapData) {
+    receiveMapData(geoType, mapData) {
+        console.log("receiving", geoType, mapData);
         AppDispatcher.handleServerAction({
             type: ActionTypes.RECEIVE_MAP_DATA,
-            mapData: mapData
+            mapData: mapData,
+            geoType: geoType
         });
-    }/*,
-    receiveGeoJSON: function(geoJSON) {
-        AppDispatcher.handleServerAction({
-            type:ActionTypes.RECEIVE_GEOJSON,
-            geoJSON: geoJSON
-        });
-    }*/
+    }
 
 };

@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
             test: /\.jsx?$|react\.js/,
             loaders: ['react-hot', 'babel'],
             include: path.join(__dirname, 'assets'),
-            exclude: /sails\.io\.js$|node_modules/
+            exclude: /sails\.io\.js$|node_modules$|\w+\.topo\.js/
           },
           { test: /\.json$/, loader: "json-loader" }]
         },
@@ -80,6 +80,7 @@ if (process.env.NODE_ENV === 'development') {
             loader: 'babel',
             //loader: 'babel?optional[]=runtime', /* npm install babel-runtime --save */
             include: path.join(__dirname, 'assets'),
+            exclude: /sails\.io\.js$|node_modules$|\w+\.geo\.js/
           }]
         }
     };

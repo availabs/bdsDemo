@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 body {
     background : black;
     color      : white;
@@ -44,4 +48,28 @@ input[type='range'] {
 
 .rangeslider__fill {
     background-color: #00ff00;
+}
+
+.leaflet-container path{
+  transition: fill .75s;
+}
+
+#topNav {
+    padding: 0 5%;
+}
+
+.main {
+    padding: 0 13%;
+}
+
+#map {
+    height: 500px;
+}
+
+.playpause {
+    margin-left: 6px;
+}
+
+.rangeSlider {
+    margin-bottom: 15px;
 }
