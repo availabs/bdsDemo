@@ -12,7 +12,7 @@ var ActionTypes = Constants.ActionTypes;
 
 module.exports = {
     receiveMapData(geoType, mapData) {
-        console.log("receiving", geoType, mapData);
+        // console.log("receiving", geoType, mapData);
         AppDispatcher.handleServerAction({
             type: ActionTypes.RECEIVE_MAP_DATA,
             mapData: mapData,

@@ -36,7 +36,7 @@ var demoStore = assign({}, EventEmitter.prototype, {
   },
 
   getMapData(type) {
-    console.log("_mapData, type", _mapData, type)
+    // console.log("_mapData, type", _mapData, type)
     return _mapData[type];
   }
 });

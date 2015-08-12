@@ -37,8 +37,14 @@ var DataMap = React.createClass({
             geoType: this.props.geoType
         };
     },
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            geoType: nextProps.geoType
+        });
+    },
     processLayers(type) {
         if(this.props.data && Object.keys(this.props.data).length !== 0) {
+
             let dataKey = this.props.geoType === "msa" ? "GEOID" : "STATE";
 
             let geoData = [];
@@ -48,7 +54,7 @@ var DataMap = React.createClass({
                 });
             });
             geoData = geoData.sort();
-            console.log("geoData", geoData);
+            // console.log("geoData", geoData);
             let scale = d3.scale.quantile()
                 .domain(geoData)
                 .range([
@@ -66,7 +72,7 @@ var DataMap = React.createClass({
                 ]);
 
             let data = this.props.data, currY = this.props.currYear; // preserving this?
-            console.log("geojson", geoJsons[type]);
+            // console.log("geojson", geoJsons[type]);
             return {
                 geo: geoJsons[type],
                 options: {
@@ -151,7 +157,7 @@ var DataMap = React.createClass({
                 metroInput.setAttribute("value", "metro");
                 metroLabel.appendChild(document.createTextNode("Metro"));
 
-                console.log("container", container);
+                // console.log("container", container);
 
                 return container;
                 // var stateInput =
@@ -161,16 +167,13 @@ var DataMap = React.createClass({
         $(".radioLabel").click((e) => {
             e.preventDefault();
             if(e.target.innerText === "State") {
-                console.log("state");
-                this.setState({
-                    geoType: "st"
-                });
+                // console.log("state");
+                this.props.changeGeoType("st");
+
             }
             else if(e.target.innerText === "Metro") {
-                console.log("metro");
-                this.setState({
-                    geoType: "msa"
-                });
+                // console.log("metro");
+                this.props.changeGeoType("msa");
             }
         });
         // layer = this.processLayers(this.state.geoType);
@@ -185,7 +188,7 @@ var DataMap = React.createClass({
         if(layer) {
             map.removeLayer(layer);
         }
-        console.log(this.state);
+        // console.log(this.state);
         rawLayer = this.processLayers(this.state.geoType),
             layer = L.geoJson(rawLayer.geo, rawLayer.options);
         map.addLayer(layer);

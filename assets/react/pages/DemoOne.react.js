@@ -145,15 +145,27 @@ var DemoOne = React.createClass({
             }, 500);
         }
     },
+
+    changeGeoType(type) {
+        this.setState({
+                mapData: {
+                st: DemoStore.getMapData("st"),
+                msa: DemoStore.getMapData("msa")
+            },
+            geoType: type,
+            currYear: this.state.currYear
+        });
+    },
+
     render() {
-        console.log("demo state", this.state);
+        // console.log("demo state", this.state);
 
         return (
             <div className="container main">
                 <h1>Demo One</h1>
                 <div className="row">
                     <div className="col-md-12">
-                        <DataMap geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                        <DataMap geoType={this.state.geoType} changeGeoType={this.changeGeoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                     </div>
                 </div>
                 <div className="row controls">
