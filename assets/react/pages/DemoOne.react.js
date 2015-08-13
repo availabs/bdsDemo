@@ -51,7 +51,7 @@ var DemoOne = React.createClass({
                     st: DemoStore.getMapData("st"),
                     msa: DemoStore.getMapData("msa")
                 },
-                geoType: "st",
+                geoType: this.state.geoType, // for some reason, doesn't work if i just remove this
                 currYear: e.target.value
             });
             // console.log("yearSlider on");
@@ -75,7 +75,7 @@ var DemoOne = React.createClass({
                 st: DemoStore.getMapData("st"),
                 msa: DemoStore.getMapData("msa")
             },
-            geoType: "st",
+            geoType: this.state.geoType,
             currYear: "1977"
         });
     },
@@ -87,7 +87,7 @@ var DemoOne = React.createClass({
                     st: DemoStore.getMapData("st"),
                     msa: DemoStore.getMapData("msa")
                 },
-                geoType: "st",
+                geoType: this.state.geoType,
                 currYear: e.target.value
             });
             $("#yearSlider").val(e.target.value).change();
@@ -126,7 +126,7 @@ var DemoOne = React.createClass({
                             st: DemoStore.getMapData("st"),
                             msa: DemoStore.getMapData("msa")
                         },
-                        geoType: "st",
+                        geoType: this.state.geoType,
                         currYear: "2012"
                     });
                 }
@@ -136,7 +136,7 @@ var DemoOne = React.createClass({
                             st: DemoStore.getMapData("st"),
                             msa: DemoStore.getMapData("msa")
                         },
-                        geoType: "st",
+                        geoType: this.state.geoType,
                         currYear: (parseInt(this.state.currYear) + 1).toString()
                     });
                     $("#yearSlider").val(this.state.currYear).change();
@@ -146,7 +146,7 @@ var DemoOne = React.createClass({
         }
     },
 
-    changeGeoType(type) {
+    changeGeoType(type) { // callback prop
         this.setState({
                 mapData: {
                 st: DemoStore.getMapData("st"),

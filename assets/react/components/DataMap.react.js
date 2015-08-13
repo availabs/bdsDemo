@@ -11,7 +11,7 @@ var React = require("react"),
             metro = require("./utils/msa.topo");
         return {
             st: topojson.feature(states, states.objects["states.geo"]),
-            msa: topojson.feature(metro, metro.objects["msa.geo"])
+            msa: topojson.feature(metro, metro.objects["fixMsa.geo"]) // b/c had to smallerify data
         };
     }());
     /*geoJsons = {
@@ -87,6 +87,32 @@ var DataMap = React.createClass({
                             opacity: 0.2,
                             fillOpacity: valid ? 0.4 : 0.0
                         }
+                    },
+                    onEachFeature(feature, layer) {
+                        if(feature.properties && parseInt(feature.properties[dataKey], 10).toString() in data) {
+                            let popupOptions = {
+                                maxWidth: 600,
+                                className: "featurePopup"
+                            },
+                            thisData = data[parseInt(feature.properties[dataKey], 10).toString()][currY];
+
+                            let name = feature.properties["NAME"],
+                                code = type === "st" ? "NAICS " + feature.properties["STATE"] : "MSA " + feature.properties["GEOID"],
+                                body = "<ul class=\"list-group\">\n" +
+                                        Object.keys(thisData).map((key) => {
+                                            if(key === "year2" || key === "state" || key === "msa") {
+                                                return ""; // probably faster than reduce
+                                            }
+                                            let val = thisData[key];
+                                            return "<li class=\"list-group-item popup\">" + // some terrible formatting
+                                                "<span class=\"badge\">" + val + "</span>" + key // underscore_like_dis to Underscore Like Dis
+                                                    .replace(/_/g, " ")
+                                                    .replace(/\w\S*/g, (txt) => {
+                                                        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                                                    }) + "</li>";
+                                        }).join("\n") + "\n</ul>";
+                            layer.bindPopup(`<h2>${name}&nbsp;<small>${code}</small></h2>${body}`, popupOptions);
+                        }
                     }
                 }
             }
@@ -160,7 +186,6 @@ var DataMap = React.createClass({
                 // console.log("container", container);
 
                 return container;
-                // var stateInput =
             }
         });
         map.addControl(new modeToggle());
@@ -197,7 +222,8 @@ var DataMap = React.createClass({
     render() {
 
         if(layer) {
-            layer.setStyle(rawLayer.options.style);
+            // layer.setStyle(rawLayer.options.style);
+            layer.setStyle(this.processLayers().options.style);
         }
 
         return (

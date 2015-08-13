@@ -73,3 +73,12 @@ input[type='range'] {
 .rangeSlider {
     margin-bottom: 15px;
 }
+
+.popup {
+    font-size: 15px;
+    width: 100%;
+}
+
+.featurePopup {
+    width: 400px;
+}
