@@ -51,7 +51,7 @@ input[type='range'] {
 }
 
 .leaflet-container path{
-  transition: fill .75s;
+  transition: fill 1s;
 }
 
 #topNav {

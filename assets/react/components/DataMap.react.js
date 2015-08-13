@@ -14,10 +14,6 @@ var React = require("react"),
             msa: topojson.feature(metro, metro.objects["fixMsa.geo"]) // b/c had to smallerify data
         };
     }());
-    /*geoJsons = {
-        state: topojson(require("./utils/states.topo")).features,
-        metro: require("./utils/msa.topo").features
-    };*/
 
 var map = null,
     geoJson = null,
@@ -72,7 +68,7 @@ var DataMap = React.createClass({
                 ]);
 
             let data = this.props.data, currY = this.props.currYear; // preserving this?
-            // console.log("geojson", geoJsons[type]);
+
             return {
                 geo: geoJsons[type],
                 options: {
@@ -137,17 +133,7 @@ var DataMap = React.createClass({
     },
 
     componentDidMount() {
-        /*
-        <div className="btn-group" data-toggle="buttons">
-            <label className="btn btn-default">
-                <input type="radio" id="state" name="state" value="state" /> State
-            </label>
-            <label className="btn btn-default">
-                <input type="radio" id="metro" name="metro" value="metro" /> Metro
-            </label>
-        </div>
-        */
-        let key = 'erickrans.4f9126ad',// am3081.kml65fk1, erickrans.4f9126ad
+        let key = "erickrans.4f9126ad",// am3081.kml65fk1, erickrans.4f9126ad
             mapquestOSM = L.tileLayer("http://{s}.tiles.mapbox.com/v3/"+key+"/{z}/{x}/{y}.png");
 
         map = L.map("map", {
@@ -183,8 +169,6 @@ var DataMap = React.createClass({
                 metroInput.setAttribute("value", "metro");
                 metroLabel.appendChild(document.createTextNode("Metro"));
 
-                // console.log("container", container);
-
                 return container;
             }
         });
@@ -192,18 +176,14 @@ var DataMap = React.createClass({
         $(".radioLabel").click((e) => {
             e.preventDefault();
             if(e.target.innerText === "State") {
-                // console.log("state");
                 this.props.changeGeoType("st");
 
             }
             else if(e.target.innerText === "Metro") {
-                // console.log("metro");
                 this.props.changeGeoType("msa");
             }
         });
-        // layer = this.processLayers(this.state.geoType);
 
-        // geoJson = L.geoJson(layer.geo, layer.options).addTo(map);
         rawLayer = this.processLayers(this.state.geoType),
             layer = L.geoJson(rawLayer.geo, rawLayer.options);
         map.addLayer(layer);
@@ -222,8 +202,7 @@ var DataMap = React.createClass({
     render() {
 
         if(layer) {
-            // layer.setStyle(rawLayer.options.style);
-            layer.setStyle(this.processLayers().options.style);
+            layer.setStyle(this.processLayers().options.style); // reprocess
         }
 
         return (

@@ -27,7 +27,6 @@ module.exports = {
         io.socket.get("/firm/" + type + "/yr" + fStr, (resData) => {
             let realData = {};
             for(let prop in resData) {
-                // realData[prop]
                 realData[prop] = {};
                 $.each(resData[prop], (_, i) => {
                     realData[prop][i["year2"]] = {
@@ -36,17 +35,8 @@ module.exports = {
                     };
                 });
             }
-            // console.log(type, realData); this is working
+
             ServerActionCreator.receiveMapData(type, realData);
         });
-    },
-
-    statesGeo() {
-
-    },
-
-    msaGeo() {
-
     }
-
 };

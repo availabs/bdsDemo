@@ -100,8 +100,6 @@ var DemoOne = React.createClass({
         }
     },
     _handleClick(e) {
-        // console.log(e);
-        // console.log("_handleClick");
         $("#playpause").toggleClass("glyphicon-play");
         $("#playpause").toggleClass("glyphicon-pause");
         if(interval) {
@@ -109,10 +107,6 @@ var DemoOne = React.createClass({
             interval = null;
         }
         else {
-            /*this.setState({
-                mapData: DemoStore.getMapData(),
-                currYear: "1977"
-            });*/
             interval = setInterval(() => {
                 inInterval = true;
                 if(parseInt(this.state.currYear) > 2011) {
@@ -158,8 +152,6 @@ var DemoOne = React.createClass({
     },
 
     render() {
-        // console.log("demo state", this.state);
-
         return (
             <div className="container main">
                 <h1>Demo One</h1>
