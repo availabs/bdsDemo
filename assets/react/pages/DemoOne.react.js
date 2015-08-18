@@ -2,11 +2,13 @@
 var React = require("react"),
     L = require("leaflet"),
     DemoStore = require("../stores/DemoStore.react"),
-
+    d3 = require("d3"),
     DataMap = require("../components/DataMap.react");
 
 var interval = null,
-    inInterval = false;;
+    inInterval = false,
+    msaData = [],
+    stData = [];
 
 var DemoOne = React.createClass({
     getInitialState() {
@@ -136,7 +138,7 @@ var DemoOne = React.createClass({
                     $("#yearSlider").val(this.state.currYear).change();
                     $("#yearSelect").val(this.state.currYear);
                 }
-            }, 500);
+            }, 750);
         }
     },
 

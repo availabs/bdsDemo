@@ -50,8 +50,9 @@ input[type='range'] {
     background-color: #00ff00;
 }
 
-.leaflet-container path{
+.leaflet-clickable {
   transition: fill 1s;
+  /*not actually working*/
 }
 
 #topNav {

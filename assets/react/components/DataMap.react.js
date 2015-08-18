@@ -2,7 +2,6 @@
 
 var React = require("react"),
     DemoStore = require("../stores/DemoStore.react"),
-    d3 = require("d3"),
     topojson = require("topojson"),
 
     // data
@@ -18,7 +17,11 @@ var React = require("react"),
 var map = null,
     geoJson = null,
     layer = null,
-    rawLayer = null;
+    rawLayer = null,
+    scales = {
+        "msa": null,
+        "st": null
+    };
 
 /*
     Props:
@@ -34,40 +37,44 @@ var DataMap = React.createClass({
         };
     },
     componentWillReceiveProps(nextProps) {
+        // console.log("will receive props", this.props, nextProps);
+
         this.setState({
             geoType: nextProps.geoType
         });
     },
     processLayers(type) {
         if(this.props.data && Object.keys(this.props.data).length !== 0) {
-
             let dataKey = this.props.geoType === "msa" ? "GEOID" : "STATE";
 
-            let geoData = [];
-            $.each(this.props.data, (id, val) => {
-                $.each(val, (yr, d) => {
-                    geoData.push(d["job_creation_births"] - d["job_destruction_deaths"]);
+            if(!scales[this.state.geoType]) {
+                let geoData = [];
+                console.log("in scale")
+                $.each(this.props.data, (id, val) => {
+                    $.each(val, (yr, d) => {
+                        geoData.push(parseInt(d["job_creation_births"] - d["job_destruction_deaths"]));
+                    });
                 });
-            });
-            geoData = geoData.sort();
-            // console.log("geoData", geoData);
-            let scale = d3.scale.quantile()
-                .domain(geoData)
-                .range([
-                    "rgb(103,0,31)",
-                    "rgb(178,24,43)",
-                    "rgb(214,96,77)",
-                    "rgb(244,165,130)",
-                    "rgb(253,219,199)",
-                    "rgb(247,247,247)",
-                    "rgb(209,229,240)",
-                    "rgb(146,197,222)",
-                    "rgb(67,147,195)",
-                    "rgb(33,102,172)",
-                    "rgb(5,48,97)"
-                ]);
+                geoData = geoData.sort();
 
-            let data = this.props.data, currY = this.props.currYear; // preserving this?
+                scales[this.state.geoType] = d3.scale.quantile()
+                    .domain(geoData)
+                    .range([
+                        "rgb(103,0,31)",
+                        "rgb(178,24,43)",
+                        "rgb(214,96,77)",
+                        "rgb(244,165,130)",
+                        "rgb(253,219,199)",
+                        "rgb(247,247,247)",
+                        "rgb(209,229,240)",
+                        "rgb(146,197,222)",
+                        "rgb(67,147,195)",
+                        "rgb(33,102,172)",
+                        "rgb(5,48,97)"
+                    ]);
+            }
+
+            let data = this.props.data, currY = this.props.currYear, scale = scales[this.state.geoType]; // preserving this?
 
             return {
                 geo: geoJsons[type],
@@ -85,13 +92,14 @@ var DataMap = React.createClass({
                         }
                     },
                     onEachFeature(feature, layer) {
+                        // console.log("in oneachf")
                         if(feature.properties && parseInt(feature.properties[dataKey], 10).toString() in data) {
+                            // console.log("actually in oneachf")
                             let popupOptions = {
                                 maxWidth: 600,
                                 className: "featurePopup"
                             },
                             thisData = data[parseInt(feature.properties[dataKey], 10).toString()][currY];
-
                             let name = feature.properties["NAME"],
                                 code = type === "st" ? "NAICS " + feature.properties["STATE"] : "MSA " + feature.properties["GEOID"],
                                 body = "<ul class=\"list-group\">\n" +
@@ -190,16 +198,25 @@ var DataMap = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState) {
-        if(layer) {
-            map.removeLayer(layer);
+        console.log(prevProps, this.state);
+        if((prevState.geoType !== this.state.geoType) || prevProps.data === undefined) { // for the first time draw when data loads
+            console.log("redrawin");
+            if(layer) {
+                map.removeLayer(layer);
+            }
+            // console.log(this.state);
+            rawLayer = this.processLayers(this.state.geoType),
+                layer = L.geoJson(rawLayer.geo, rawLayer.options);
+            map.addLayer(layer);
         }
-        // console.log(this.state);
-        rawLayer = this.processLayers(this.state.geoType),
-            layer = L.geoJson(rawLayer.geo, rawLayer.options);
-        map.addLayer(layer);
     },
 
     render() {
+        if(!this.props.data && map) { // bc won't draw w/ popups and data in comp did mount
+            /*rawLayer = this.processLayers(this.state.geoType),
+            layer = L.geoJson(rawLayer.geo, rawLayer.options);
+            map.addLayer(layer);*/
+        }
 
         if(layer) {
             layer.setStyle(this.processLayers().options.style); // reprocess
