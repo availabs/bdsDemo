@@ -82,7 +82,7 @@ var DemoOne = React.createClass({
         });
     },
     _onChangeYear(e) {
-        if( e.keyCode == 13 && parseInt(this.state.currYear) < 2013) {
+        if(e.keyCode == 13 && parseInt(this.state.currYear) < 2013) {
             // console.log("_onChangeYear")
             this.setState({
                 mapData: {
