@@ -121,7 +121,7 @@ var DataMap = React.createClass({
                                         });
                                 },
                                 mouseout(e) {
-                                    // $("#tooltip").hide();
+                                    $("#tooltip").hide();
                                 }
                             });
 
