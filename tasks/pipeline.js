@@ -18,7 +18,8 @@ var cssFilesToInject = [
   'styles/**/*.css',
   'bower_components/leaflet/dist/leaflet.css',
   'bower_components/bootstrap/dist/css/bootstrap.min.css',
-  'bower_components/rangeslider.js/dist/rangeslider.css'
+  'bower_components/rangeslider.js/dist/rangeslider.css',
+  'bower_components/c3/c3.min.css'
 ];
 
 
