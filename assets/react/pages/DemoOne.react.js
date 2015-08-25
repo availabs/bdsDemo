@@ -1,9 +1,12 @@
 "use strict"
 var React = require("react"),
     L = require("leaflet"),
-    DemoStore = require("../stores/DemoStore.react"),
     d3 = require("d3"),
-    DataMap = require("../components/DataMap.react");
+
+    // Components
+    DemoStore = require("../stores/DemoStore.react"),
+    DataMap = require("../components/DataMap.react"),
+    YearGraph = require("../components/YearGraph.react");
 
 var interval = null,
     inInterval = false,
@@ -175,6 +178,9 @@ var DemoOne = React.createClass({
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="row">
+                    <YearGraph geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                 </div>
             </div>
         );

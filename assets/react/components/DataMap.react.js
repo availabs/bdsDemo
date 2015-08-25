@@ -53,7 +53,7 @@ var DataMap = React.createClass({
                 let geoData = [];
                 $.each(this.props.data, (id, val) => {
                     $.each(val, (yr, d) => {
-                        geoData.push(parseInt(d["job_creation_births"] - d["job_destruction_deaths"]));
+                        geoData.push(parseInt(d["job_creation_births"]) - parseInt(d["job_destruction_deaths"]));
                     });
                 });
                 geoData = geoData.sort();

@@ -25,18 +25,8 @@ module.exports = {
     mapData(type, fields) {
         let fStr = "?" + fields.map((row) => "fields=" + row).join("&");
         io.socket.get("/firm/" + type + "/yr" + fStr, (resData) => {
-            let realData = {};
-            for(let prop in resData) {
-                realData[prop] = {};
-                $.each(resData[prop], (_, i) => {
-                    realData[prop][i["year2"]] = {
-                        "job_creation_births": i["job_creation_births"],
-                        "job_destruction_deaths": i["job_destruction_deaths"]
-                    };
-                });
-            }
-
-            ServerActionCreator.receiveMapData(type, realData);
+            // console.log(resData);
+            ServerActionCreator.receiveMapData(type, resData);
         });
     }
 };
