@@ -1,8 +1,10 @@
 var React = require("react"),
     c3 = require("c3"),
+    d3 = require("d3"),
 
     sicsToAbbr = require("../utils/sicsToAbbr.json"),
     abbrToName = require("../utils/abbrToName.json"),
+    msaIdToName = require("./utils/msaIdToName"),
     abbrToSics = ((obj) => {
 
         let new_obj = {};
@@ -36,8 +38,8 @@ var convertData = (data, currYear, varFunction, geoType) => {
         // console.log(geoId.toString().length === 1 ? "0" + geoId.toString() : geoId.toString(), sicsToAbbr[geoId.toString().length === 1 ? "0" + geoId.toString() : geoId.toString()]);
         converted.push({
             geoId: strGeoId,
-            abbr: geoType === "st" ? sicsToAbbr[strGeoId] : geoId,
-            value: geoType === "st" ? varFunction(data[geoId][currYear]) : geoId
+            abbr: geoType === "st" ? sicsToAbbr[strGeoId] : msaIdToName[strGeoId],
+            value: varFunction(data[geoId][currYear])
         });
     }
     return converted.sort((a, b) => a.value - b.value);
@@ -69,9 +71,26 @@ var YearGraph = React.createClass({
 
     componentDidUpdate(prevProps, prevState) {
         let thisProps = this.props;
-        if(!prevProps.data && this.props.data) {
+        if((!prevProps.data && this.props.data) || (this.props.currYear !== prevProps.currYear) || (this.props.geoType !== prevProps.geoType)) {
             let converted = convertData(thisProps.data, thisProps.currYear, thisProps.varFunction, thisProps.geoType);
             // console.log(thisProps);
+            let scale = d3.scale.quantile()
+                .domain(converted.map((val, i) => {
+                    return val.value;
+                }))
+                .range([
+                    "rgb(103,0,31)",
+                    "rgb(178,24,43)",
+                    "rgb(214,96,77)",
+                    "rgb(244,165,130)",
+                    "rgb(253,219,199)",
+                    "rgb(209,229,240)",
+                    "rgb(146,197,222)",
+                    "rgb(67,147,195)",
+                    "rgb(33,102,172)",
+                    "rgb(5,48,97)"
+                    ]);
+
             console.log("creating graph", thisProps.geoType === "st")
             let graph = c3.generate({
                 bindto: "#yearGraph",
@@ -81,7 +100,10 @@ var YearGraph = React.createClass({
                         x: "abbr",
                         value: ["value"],
                     },
-                    type: "bar"
+                    type: "bar",
+                    color(color, d) {
+                        return scale(d.value);
+                    }
                 },
                 axis: {
                     x: {
@@ -90,6 +112,7 @@ var YearGraph = React.createClass({
                             position: "outer-center",
                         },
                         type: "category",
+                        // show: false
                         show: thisProps.geoType === "st"
                     },
                     y: {
@@ -101,27 +124,28 @@ var YearGraph = React.createClass({
                 },
                 tooltip: {
                     format: {
-                        title(d) {// doesn't work, converted[d] doesn't vary betwee years
-                            console.log(d, convertData(thisProps.data, thisProps.currYear, thisProps.varFunction, thisProps.geoType)[d], converted[d]);
-                        },
-                        name(name, ratio, id, index) { // DOESNT WORK
+                        title(i) {// doesn't work, converted[d] doesn't vary betwee years
+                            let d = converted[i];
                             if(thisProps.geoType === "st") {
                                 // let data = convertData(thisProps.data, thisProps.currYear, thisProps.varFunction, thisProps.geoType)
-                                /*let d = converted[i].geoId.length === 1 ? "0" + converted[i].geoId : converted[i].geoId;
-                                let padded = d.length === 1 ? "0" + d : d;
-                                console.log(i, padded, abbrToName[padded], converted[i]);
-                                return abbrToName[padded] +
-                                    " - <small>" + abbrToSics[padded] + "</small>";*/
-                                // console.log(name, ratio, id, index);
-                                // return "hai";
+
+
+                                return abbrToName[d.abbr] +
+                                    " - <small>" + d.geoId + "</small>";
                             }
                             else {
-                                // return i;
+                                return d.abbr +
+                                    " - <small>" + d.geoId + "</small>";
                             }
+                        },
+                        name(name, ratio, id, index) { // DOESNT WORK
+
+                            // return null;
+                            return thisProps.varString;
                         },
                         value(value, ratio, id) {
                             // console.log(value, ratio, id);
-                            return value + " " + thisProps.varString;
+                            return value;// + " " + thisProps.varString;
                         }
                     }
                 },
@@ -136,7 +160,7 @@ var YearGraph = React.createClass({
         }
         else if(thisProps.data && thisProps.currYear) {
             // console.log(convertData(thisProps.data, thisProps.currYear, thisProps.varFunction, thisProps.geoType));
-            console.dir(this.state.graph);
+            /*console.dir(this.state.graph);
             this.state.graph.load({
                 json: convertData(thisProps.data, thisProps.currYear, thisProps.varFunction, thisProps.geoType),
                 keys: {
@@ -145,10 +169,11 @@ var YearGraph = React.createClass({
                 },
                 unload: true
             });
-            this.state.graph.axis.show_x(thisProps.geoType === "st");
+            this.state.graph.axis.show_x(thisProps.geoType === "st");*/
+
         }
 
-        if(this.props.varString !== thisProps.varString) {
+        if(this.props.varString !== prevProps.varString) {
             // change y label
         }
     },

@@ -104,5 +104,10 @@ input[type='range'] {
 
 .c3-axis-x-label {
     /*font-size: 21px;*/
-    /*margin-top: 10px;*/
+    margin-top: 10px;
+}
+
+#yearGraph {
+    height: 320px;
+    width: auto;
 }

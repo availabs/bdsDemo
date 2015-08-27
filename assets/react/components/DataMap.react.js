@@ -111,7 +111,7 @@ var DataMap = React.createClass({
                             layer.on({
                                 mouseover(e) {
                                     $("#tooltip").show();
-                                    console.log("mousingover", e);
+                                    // console.log("mousingover", e);
 
                                     $("#tooltip")
                                         .html(getTooltip(type, dataKey, feature))
@@ -171,6 +171,8 @@ var DataMap = React.createClass({
                                     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
                                 }) + "</li>";
                     }).join("\n") + "\n</ul>";
+
+        console.log(type, dataKey, feature, "getTooltip");
 
         return `<div class=\"popupWrapper\"><h2 id=\"${parseInt(feature.properties[dataKey], 10).toString()}id\">
                     ${name}&nbsp;<small>${code}</small></h2>${body}</div>`;
