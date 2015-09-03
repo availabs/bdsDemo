@@ -75,7 +75,8 @@ var DataMap = React.createClass({
                     ]);
             }
 
-            let data = this.props.data, currY = this.props.currYear, scale = scales[this.state.geoType]; // preserving this?
+            let data = this.props.data, currY = this.props.currYear, scale = scales[this.state.geoType],
+                changeSelected = this.props.changeSelected; // preserving this?
 
             return {
                 geo: geoJsons[type],
@@ -109,19 +110,23 @@ var DataMap = React.createClass({
                             }
 
                             layer.on({
-                                mouseover(e) {
-                                    $("#tooltip").show();
-                                    // console.log("mousingover", e);
-
-                                    $("#tooltip")
-                                        .html(getTooltip(type, dataKey, feature))
-                                        .css({
-                                            "left": e.originalEvent.x,
-                                            "top": e.originalEvent.y
-                                        });
-                                },
-                                mouseout(e) {
-                                    $("#tooltip").hide();
+                                click(e) {
+                                    let tt = $('#tooltip');
+                                    if(tt.is(':hidden')) {
+                                        $("#tooltip").show();
+                                        // console.log("mousingover", e);
+                                        $("#tooltip")
+                                            .html(getTooltip(type, dataKey, feature))
+                                            .css({
+                                                "left": e.originalEvent.x,
+                                                "top": e.originalEvent.y
+                                            });
+                                        // console.log(type, dataKey, feature);
+                                        changeSelected(parseInt(feature.properties[dataKey], 10).toString());
+                                    }
+                                    else {
+                                        $("#tooltip").hide();
+                                    }
                                 }
                             });
 
@@ -172,7 +177,7 @@ var DataMap = React.createClass({
                                 }) + "</li>";
                     }).join("\n") + "\n</ul>";
 
-        console.log(type, dataKey, feature, "getTooltip");
+        // console.log(type, dataKey, feature, "getTooltip");
 
         return `<div class=\"popupWrapper\"><h2 id=\"${parseInt(feature.properties[dataKey], 10).toString()}id\">
                     ${name}&nbsp;<small>${code}</small></h2>${body}</div>`;

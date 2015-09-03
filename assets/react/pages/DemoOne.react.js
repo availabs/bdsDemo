@@ -6,7 +6,8 @@ var React = require("react"),
     // Components
     DemoStore = require("../stores/DemoStore.react"),
     DataMap = require("../components/DataMap.react"),
-    YearGraph = require("../components/YearGraph.react");
+    YearGraph = require("../components/YearGraph.react"),
+    AreaGraph = require("../components/AreaGraph.react");
 
 var interval = null,
     inInterval = false,
@@ -21,7 +22,8 @@ var DemoOne = React.createClass({
                 msa: DemoStore.getMapData("msa")
             },
             geoType: "st",
-            currYear: "1977"
+            currYear: "1977",
+            selected: "36"
         }
     },
     componentDidMount() {
@@ -156,13 +158,19 @@ var DemoOne = React.createClass({
         });
     },
 
+    _changeSelected(newSel) {
+        this.setState({
+            selected: newSel
+        });
+    },
+
     render() {
         return (
             <div className="container main">
                 <h1>Demo One</h1>
                 <div className="row">
                     <div className="col-md-12">
-                        <DataMap geoType={this.state.geoType} changeGeoType={this.changeGeoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                        <DataMap changeSelected={this._changeSelected} geoType={this.state.geoType} changeGeoType={this.changeGeoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                     </div>
                 </div>
                 <div className="row controls">
@@ -181,6 +189,9 @@ var DemoOne = React.createClass({
                 </div>
                 <div className="row">
                     <YearGraph geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                </div>
+                <div className="row">
+                    <AreaGraph geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
                 </div>
             </div>
         );
