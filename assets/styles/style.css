@@ -86,10 +86,10 @@ input[type='range'] {
 
 #tooltip {
     width: 400px;
-    height: 200px;
-    position: fixed;
-    top: 50px;
-    left: 50px;
+    /*height: 200px;*/
+    position: absolute;
+    /*top: 50px;
+    left: 50px;*/
     display: none;
     background-color: #fff;
     padding: 0 35px;

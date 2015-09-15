@@ -17,8 +17,8 @@ io.sails.url = 'http://localhost:1337'; // for API
 
 module.exports = {
     init() {
-        this.mapData("msa", ["job_creation_births", "job_destruction_deaths"]);
-        this.mapData("st", ["job_creation_births", "job_destruction_deaths"]);
+        this.mapData("msa", ["job_creation", "job_destruction", "net_job_creation"]);
+        this.mapData("st", ["job_creation", "job_destruction", "net_job_creation"]);
     },
 
     // type: msa or st

@@ -53,7 +53,7 @@ var DataMap = React.createClass({
                 let geoData = [];
                 $.each(this.props.data, (id, val) => {
                     $.each(val, (yr, d) => {
-                        geoData.push(parseInt(d["job_creation_births"]) - parseInt(d["job_destruction_deaths"]));
+                        geoData.push(parseInt(d["job_creation"]) - parseInt(d["job_destruction"]));
                     });
                 });
                 geoData = geoData.sort();
@@ -86,7 +86,7 @@ var DataMap = React.createClass({
                         let valid = parseInt(feature.properties[dataKey], 10).toString() in data && parseInt(currY) < 2013;
                         return {
                             fill: true, // redund parseInt then toSTring to handle leading zeros
-                            fillColor: valid ? scale(parseInt(data[parseInt(feature.properties[dataKey], 10).toString()][currY]["job_creation_births"]) - parseInt(data[parseInt(feature.properties[dataKey], 10).toString()][currY]["job_destruction_deaths"])) : "#000",
+                            fillColor: valid ? scale(parseInt(data[parseInt(feature.properties[dataKey], 10).toString()][currY]["job_creation"]) - parseInt(data[parseInt(feature.properties[dataKey], 10).toString()][currY]["job_destruction"])) : "#000",
                             color: "#0000CC",
                             weight: 0.1,
                             opacity: 0.2,
@@ -104,29 +104,21 @@ var DataMap = React.createClass({
                         // console.log("in oneachf")
                         // console.log(layer, dataKey, feature, currY, scale, parseInt(feature.properties[dataKey], 10).toString());
                         if(feature.properties && parseInt(feature.properties[dataKey], 10).toString() in data) {
-                            // console.log("actually in oneachf")
-                            if(state) {
-                                // layer.unbindPopup();
-                            }
 
                             layer.on({
                                 click(e) {
+                                    // console.log(e);
                                     let tt = $('#tooltip');
-                                    if(tt.is(':hidden')) {
-                                        $("#tooltip").show();
-                                        // console.log("mousingover", e);
-                                        $("#tooltip")
-                                            .html(getTooltip(type, dataKey, feature))
-                                            .css({
-                                                "left": e.originalEvent.x,
-                                                "top": e.originalEvent.y
-                                            });
-                                        // console.log(type, dataKey, feature);
-                                        changeSelected(parseInt(feature.properties[dataKey], 10).toString());
-                                    }
-                                    else {
-                                        $("#tooltip").hide();
-                                    }
+                                    $("#tooltip").show();
+                                    // console.log("mousingover", e);
+                                    $("#tooltip")
+                                        .html(getTooltip(type, dataKey, feature))
+                                        .css({
+                                            "left": e.originalEvent.layerX + 15,
+                                            "top": e.originalEvent.layerY + 5
+                                        });
+                                    // console.log(type, dataKey, feature);
+                                    changeSelected(parseInt(feature.properties[dataKey], 10).toString());
                                 }
                             });
 
@@ -179,8 +171,8 @@ var DataMap = React.createClass({
 
         // console.log(type, dataKey, feature, "getTooltip");
 
-        return `<div class=\"popupWrapper\"><h2 id=\"${parseInt(feature.properties[dataKey], 10).toString()}id\">
-                    ${name}&nbsp;<small>${code}</small></h2>${body}</div>`;
+        return `<div class=\"popupWrapper\"><h3 id=\"${parseInt(feature.properties[dataKey], 10).toString()}id\">
+                    ${name}&nbsp;<small>${code}</small></h3>${body}</div>`;
     },
 
     componentDidMount() {
@@ -196,6 +188,10 @@ var DataMap = React.createClass({
           layers: [mapquestOSM],
           zoomControl: true,
           attributionControl: false
+        });
+
+        map.on("click", (e) => {
+            $("#tooltip").hide();
         });
 
         let modeToggle = L.Control.extend({
@@ -229,6 +225,7 @@ var DataMap = React.createClass({
         map.addControl(new modeToggle());
         $(".radioLabel").click((e) => {
             e.preventDefault();
+            $("#tooltip").hide();
             if(e.target.innerText === "State") {
                 this.props.changeGeoType("st");
 

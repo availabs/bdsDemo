@@ -23,7 +23,9 @@ var DemoOne = React.createClass({
             },
             geoType: "st",
             currYear: "1977",
-            selected: "36"
+            selected: "36",
+            varField: "net_job_creation",
+            varString: "Net Job Births"
         }
     },
     componentDidMount() {
@@ -49,6 +51,8 @@ var DemoOne = React.createClass({
             }
             return range;
         }
+
+        $(".varSelect").first().button("toggle");
 
         $("#yearSlider").on("input", (e) => { // necessary b/c sliders don't go well with onchange
             // console.log(e.target.value);
@@ -159,14 +163,25 @@ var DemoOne = React.createClass({
     },
 
     _changeSelected(newSel) {
+        if(newSel[0] === "0") newSel = newSel[1];
         this.setState({
             selected: newSel
         });
     },
 
+    _onButtonClick(vr) {
+        // console.log(vr);
+        $(".varSelect").removeClass("active");
+        $("#" + vr).addClass("active");
+        this.setState({
+            varField: vr
+        });
+    },
+
     render() {
+        console.log(this.state);
         return (
-            <div className="container main">
+            <div className="container-fluid main">
                 <h1>Demo One</h1>
                 <div className="row">
                     <div className="col-md-12">
@@ -174,24 +189,25 @@ var DemoOne = React.createClass({
                     </div>
                 </div>
                 <div className="row controls">
-                    <div className="col-md-12">
-                        <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
-                        <div className="row">
-                            <div className="col-md-6">
-                                <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
-                                <button type="button" onClick={this._handleClick} className="btn btn-default playpause"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
-                            </div>
-                            <div className="col-md-6">
-
-                            </div>
+                    <div className="col-md-3">
+                        <br />
+                        <div className="btn-group" role="group" aria-label="...">
+                          <button type="button" onClick={this._onButtonClick.bind(null, "net_job_creation")} id="net_job_creation" className="btn btn-default varSelect">Net Jobs Created</button>
+                          <button type="button" onClick={this._onButtonClick.bind(null, "job_creation")} id="job_creation" className="btn btn-default varSelect">Jobs Created</button>
+                          <button type="button" onClick={this._onButtonClick.bind(null, "job_destruction")} id="job_destruction" className="btn btn-default varSelect">Jobs Destroyed</button>
                         </div>
+                    </div>
+                    <div className="col-md-9">
+                        <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
+                        <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
+                        <button type="button" onClick={this._handleClick} className="btn btn-default playpause"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
                     </div>
                 </div>
                 <div className="row">
-                    <YearGraph geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                    <YearGraph varField={this.state.varField} changeSelected={this._changeSelected} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                 </div>
                 <div className="row">
-                    <AreaGraph geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
+                    <AreaGraph varField={this.state.varField} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
                 </div>
             </div>
         );
