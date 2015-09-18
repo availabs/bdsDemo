@@ -25,7 +25,8 @@ var DemoOne = React.createClass({
             currYear: "1977",
             selected: "36",
             varField: "net_job_creation",
-            varString: "Net Job Births"
+            varString: "Net Job Births",
+            scale: false
         }
     },
     componentDidMount() {
@@ -189,7 +190,7 @@ var DemoOne = React.createClass({
                     </div>
                 </div>
                 <div className="row controls">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <br />
                         <div className="btn-group" role="group" aria-label="...">
                           <button type="button" onClick={this._onButtonClick.bind(null, "net_job_creation")} id="net_job_creation" className="btn btn-default varSelect">Net Jobs Created</button>
@@ -197,17 +198,17 @@ var DemoOne = React.createClass({
                           <button type="button" onClick={this._onButtonClick.bind(null, "job_destruction")} id="job_destruction" className="btn btn-default varSelect">Jobs Destroyed</button>
                         </div>
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-8">
                         <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
                         <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
                         <button type="button" onClick={this._handleClick} className="btn btn-default playpause"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
                     </div>
                 </div>
                 <div className="row">
-                    <YearGraph varField={this.state.varField} changeSelected={this._changeSelected} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                    <YearGraph scale={this.state.scale} varField={this.state.varField} changeSelected={this._changeSelected} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                 </div>
                 <div className="row">
-                    <AreaGraph varField={this.state.varField} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
+                    <AreaGraph scale={this.state.scale} varField={this.state.varField} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
                 </div>
             </div>
         );

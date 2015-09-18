@@ -156,7 +156,7 @@ var DataMap = React.createClass({
         let name = feature.properties["NAME"],
             code = type === "st" ? "NAICS " + feature.properties["STATE"] : "MSA " + feature.properties["GEOID"],
             body = "<ul class=\"list-group\">\n" +
-                    Object.keys(thisData).map((key) => {
+                    Object.keys(thisData).filter((v) => v !== "emp").map((key) => {
                         if(key === "year2" || key === "state" || key === "msa") {
                             return ""; // probably faster than reduce
                         }

@@ -18,12 +18,12 @@ var React = require("react"),
         return new_obj;
     })(sicsToAbbr);
 
-var convertData = (data, varField, geoType) => {
+var convertData = (data, varField, geoType, scale) => {
     let toRet = [];
     for(let yr in data) {
         toRet.push({
             "yr": yr,
-            "val": data[yr][varField]
+            "val": data[yr][varField] / scale ? data[yr]["emp"] : 1
         });
     }
     return toRet;
@@ -42,18 +42,19 @@ var AreaGraph = React.createClass({
             geoType: "st",
             selected: "36", // NY
             varField: "net_job_creation",
-            varString: "Net Job Creation"
+            varString: "Net Job Creation",
+            scale: false
         };
     },
 
     componentDidUpdate(prevProps, prevState) {
-        // console.log("compDidUpdate", prevProps, this.props);
+        console.log("compDidUpdate", convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale));
         let thisProps = this.props;
         if(prevProps.data === null && this.props.data) {
             let graph = c3.generate({
                 bindto: "#areaGraph",
                 data: {
-                    json: convertData(this.props.data, this.props.varField, this.props.geoType),
+                    json: convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale),
                     keys: {
                         x: "yr",
                         value: ["val"]
@@ -86,6 +87,9 @@ var AreaGraph = React.createClass({
                 },
                 point: {
                     show: false
+                },
+                legend: {
+                    show: false
                 }
             });
             this.setState({
@@ -95,7 +99,7 @@ var AreaGraph = React.createClass({
         else if((this.props.selected !== prevProps.selected) || (this.props.varField !== prevProps.varField)) {
             this.state.graph.load({
                 unload: true,
-                json: convertData(this.props.data, this.props.varField, this.props.geoType),
+                json: convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale),
                 keys: {
                     x: "yr",
                     value: ["val"]

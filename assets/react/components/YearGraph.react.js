@@ -31,7 +31,7 @@ function invert (obj) {
   return new_obj;
 };
 
-var convertData = (data, currYear, varField, geoType) => {
+var convertData = (data, currYear, varField, geoType, scale) => {
     let converted = [];
     for(let geoId in data) {
         let strGeoId = geoType === "st" ? (geoId.length === 1 ? "0" + geoId : geoId) : "" + geoId;
@@ -40,7 +40,7 @@ var convertData = (data, currYear, varField, geoType) => {
         converted.push({
             geoId: strGeoId,
             abbr: geoType === "st" ? sicsToAbbr[strGeoId] : msaIdToName[strGeoId],
-            value: data[geoId][currYear][varField]
+            value: data[geoId][currYear][varField] / (scale ? data[geoId][currYear]["emp"] : 1)
         });
     }
     return converted.sort((a, b) => a.value - b.value);
@@ -66,14 +66,15 @@ var YearGraph = React.createClass({
             data: null,
             currYear: "1977",
             varString: "Net Job Creation",
-            varField: "net_job_creation"
+            varField: "net_job_creation",
+            scale: false
         }
     },
 
     componentDidUpdate(prevProps, prevState) {
         let thisProps = this.props;
         if((!prevProps.data && this.props.data) || (this.props.varField !== prevProps.varField) || (this.props.currYear !== prevProps.currYear) || (this.props.geoType !== prevProps.geoType)) {
-            let converted = convertData(thisProps.data, thisProps.currYear, thisProps.varField, thisProps.geoType);
+            let converted = convertData(thisProps.data, thisProps.currYear, thisProps.varField, thisProps.geoType, thisProps.scale);
             // console.log(thisProps);
             let scale = d3.scale.quantile()
                 .domain(converted.map((val, i) => {
