@@ -16,7 +16,7 @@ var React = require("react"),
         }
 
         return new_obj;
-    })(sicsToAbbr);
+    })(sicsToAbbr), thisProps;
 
 function invert (obj) {
 
@@ -72,8 +72,8 @@ var YearGraph = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState) {
-        let thisProps = this.props;
-        if((!prevProps.data && this.props.data) || (this.props.varField !== prevProps.varField) || (this.props.currYear !== prevProps.currYear) || (this.props.geoType !== prevProps.geoType)) {
+        thisProps = this.props;
+        if((!prevProps.data && this.props.data) || (this.props.varField !== prevProps.varField) || (this.props.currYear !== prevProps.currYear) || (this.props.geoType !== prevProps.geoType) || (this.props.scale !== prevProps.scale)) {
             let converted = convertData(thisProps.data, thisProps.currYear, thisProps.varField, thisProps.geoType, thisProps.scale);
             // console.log(thisProps);
             let scale = d3.scale.quantile()
@@ -122,7 +122,15 @@ var YearGraph = React.createClass({
                         },
                         type: "category",
                         // show: false
-                        show: false
+                        show: false,
+                        format(x) {
+                            if(thisProps.scale) {
+                                return (x.toPrecision(2) * 100).toString() + "%";
+                            }
+                            else {
+                                return x;
+                            }
+                        }
                     },
                     y: {
                         label: {
@@ -147,14 +155,12 @@ var YearGraph = React.createClass({
                                     " - <small>" + d.geoId + "</small>";
                             }
                         },
-                        name(name, ratio, id, index) { // DOESNT WORK
-
-                            // return null;
-                            return thisProps.varString;
+                        name(name, ratio, id, index) {
+                            return (thisProps.scale ? "Percent ": "") + thisProps.varString;
                         },
                         value(value, ratio, id) {
                             // console.log(value, ratio, id);
-                            return value;// + " " + thisProps.varString;
+                            return thisProps.scale ? value.toPrecision(2).toString() + "%" : value;// + " " + thisProps.varString;
                         }
                     }
                 },

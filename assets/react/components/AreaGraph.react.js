@@ -16,14 +16,17 @@ var React = require("react"),
         }
 
         return new_obj;
-    })(sicsToAbbr);
+    })(sicsToAbbr),
+    thisProps;
 
 var convertData = (data, varField, geoType, scale) => {
+    console.log("converting data", data, varField, geoType, scale);
     let toRet = [];
     for(let yr in data) {
+        // console.log(data[yr][varField], data[yr]["emp"]);
         toRet.push({
             "yr": yr,
-            "val": data[yr][varField] / scale ? data[yr]["emp"] : 1
+            "val": data[yr][varField] / (scale ? data[yr]["emp"] : 1)
         });
     }
     return toRet;
@@ -37,6 +40,7 @@ var AreaGraph = React.createClass({
     },
 
     getDefaultProps() {
+
         return {
             data: null,
             geoType: "st",
@@ -48,8 +52,8 @@ var AreaGraph = React.createClass({
     },
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("compDidUpdate", convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale));
-        let thisProps = this.props;
+        // console.log("compDidUpdate", convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale));
+        thisProps = this.props;
         if(prevProps.data === null && this.props.data) {
             let graph = c3.generate({
                 bindto: "#areaGraph",
@@ -67,7 +71,16 @@ var AreaGraph = React.createClass({
                         label: {
                             text: "Year",
                             position: "outer-center"
-                        }
+                        },
+                        format(x) {
+                            //TODO: fix.
+                            if(thisProps.scale) {
+                                return (x.toPrecision(2) * 100).toString() + "%";
+                            }
+                            else {
+                                return x;
+                            }
+                        },
                     },
                     y: {
                         label: {
@@ -78,10 +91,12 @@ var AreaGraph = React.createClass({
                 },
                 tooltip: {
                     format: {
-                        name(name, ratio, id, index) { // DOESNT WORK
-
-                            // return null;
-                            return thisProps.varString;
+                        name() {
+                            return (thisProps.scale ? "Percent ": "") + thisProps.varString;
+                        },
+                        value(value, ratio, id) {
+                            // console.log(value, ratio, id);
+                            return thisProps.scale ?  value.toPrecision(2).toString() + "%" : value;// + " " + thisProps.varString;
                         }
                     }
                 },
@@ -96,7 +111,7 @@ var AreaGraph = React.createClass({
                 graph
             });
         }
-        else if((this.props.selected !== prevProps.selected) || (this.props.varField !== prevProps.varField)) {
+        else if((this.props.selected !== prevProps.selected) || (this.props.varField !== prevProps.varField) || (this.props.scale !== prevProps.scale)) {
             this.state.graph.load({
                 unload: true,
                 json: convertData(this.props.data, this.props.varField, this.props.geoType, this.props.scale),
@@ -109,7 +124,7 @@ var AreaGraph = React.createClass({
     },
 
     render() {
-        // console.log(this.props);
+        console.log("areagraph props", this.props);
         return (
             <div>
                 <h2>{this.props.varString} for {this.props.geoType === "st" ? abbrToName[sicsToAbbr[this.props.selected.length === 1 ? "0" + this.props.selected : this.props.selected]] : msaIdToName[this.props.selected]}</h2>

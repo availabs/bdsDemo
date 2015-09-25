@@ -54,6 +54,7 @@ var DemoOne = React.createClass({
         }
 
         $(".varSelect").first().button("toggle");
+        $("#total").button("toggle");
 
         $("#yearSlider").on("input", (e) => { // necessary b/c sliders don't go well with onchange
             // console.log(e.target.value);
@@ -175,7 +176,20 @@ var DemoOne = React.createClass({
         $(".varSelect").removeClass("active");
         $("#" + vr).addClass("active");
         this.setState({
-            varField: vr
+            varField: vr,
+            varString: vr.replace(/_/g, " ")
+                            .replace(/\w\S*/g, (txt) => {
+                                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                            })
+        });
+    },
+
+    _togglePercent(vr) {
+        // $("#togglePercent").toggleClass("active");
+        $(".togglePercent").removeClass("active");
+        $("#" + vr).addClass("active");
+        this.setState({
+            scale: vr === "percent"
         });
     },
 
@@ -190,25 +204,32 @@ var DemoOne = React.createClass({
                     </div>
                 </div>
                 <div className="row controls">
-                    <div className="col-md-4">
-                        <br />
-                        <div className="btn-group" role="group" aria-label="...">
-                          <button type="button" onClick={this._onButtonClick.bind(null, "net_job_creation")} id="net_job_creation" className="btn btn-default varSelect">Net Jobs Created</button>
-                          <button type="button" onClick={this._onButtonClick.bind(null, "job_creation")} id="job_creation" className="btn btn-default varSelect">Jobs Created</button>
-                          <button type="button" onClick={this._onButtonClick.bind(null, "job_destruction")} id="job_destruction" className="btn btn-default varSelect">Jobs Destroyed</button>
-                        </div>
-                    </div>
-                    <div className="col-md-8">
+                    <div className="col-md-12">
                         <input id="yearSlider" type="range" min="1977" max="2012" step="1" defaultValue={this.state.currYear} />
+
+                    </div>
+                </div>
+                <div className="row controls">
+                    <div className="col-md-12">
                         <label><input id="yearSelect" type="number" defaultValue={this.state.currYear} onKeyDown={this._onChangeYear} name="year" /> </label>
                         <button type="button" onClick={this._handleClick} className="btn btn-default playpause"><span id="playpause" className="glyphicon glyphicon-play"></span></button>
+                        <div className="btn-group" role="group" aria-label="...">
+                            <button type="button" onClick={this._onButtonClick.bind(null, "net_job_creation")} id="net_job_creation" className="btn btn-default varSelect">Net Jobs Created</button>
+                            <button type="button" onClick={this._onButtonClick.bind(null, "job_creation")} id="job_creation" className="btn btn-default varSelect">Jobs Created</button>
+                            <button type="button" onClick={this._onButtonClick.bind(null, "job_destruction")} id="job_destruction" className="btn btn-default varSelect">Jobs Destroyed</button>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div className="btn-group" role="group" aria-label="...">
+                            <button type="button" onClick={this._togglePercent.bind(null, "total")} id="total" className="btn btn-default togglePercent">Total jobs</button>
+                            <button type="button" onClick={this._togglePercent.bind(null, "percent")} id="percent" className="btn btn-default togglePercent">Percent jobs</button>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
-                    <YearGraph scale={this.state.scale} varField={this.state.varField} changeSelected={this._changeSelected} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
+                    <YearGraph scale={this.state.scale} varString={this.state.varString} varField={this.state.varField} changeSelected={this._changeSelected} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
                 </div>
                 <div className="row">
-                    <AreaGraph scale={this.state.scale} varField={this.state.varField} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
+                    <AreaGraph scale={this.state.scale} varString={this.state.varString} varField={this.state.varField} geoType={this.state.geoType} data={this.state.mapData[this.state.geoType] ? this.state.mapData[this.state.geoType][this.state.selected] : null} selected={this.state.selected} />
                 </div>
             </div>
         );
