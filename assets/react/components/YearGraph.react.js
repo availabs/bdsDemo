@@ -134,7 +134,7 @@ var YearGraph = React.createClass({
                     },
                     y: {
                         label: {
-                            text: (thisProps.scale ? "Percent ": "") + this.props.varString,
+                            text: this.props.varString,
                             position: "outer-middle"
                         }
                     }
