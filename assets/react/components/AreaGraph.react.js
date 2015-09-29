@@ -84,7 +84,7 @@ var AreaGraph = React.createClass({
                     },
                     y: {
                         label: {
-                            text: this.props.varString,
+                            text: (thisProps.scale ? "Percent ": "") + this.props.varString,
                             position: "outer-middle"
                         }
                     }
