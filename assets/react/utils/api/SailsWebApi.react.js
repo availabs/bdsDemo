@@ -15,7 +15,7 @@ var ServerActionCreator = require("../../actions/ServerActionsCreator"),
 // var io = sailsIO(socketClient);
 
 // io.sails.url = 'http://localhost:1337'; // for API
-const host = "http://localhost:1337";
+const host = "http://bds.availabs.org";//"http://localhost:1337";
 
 module.exports = {
     init() {

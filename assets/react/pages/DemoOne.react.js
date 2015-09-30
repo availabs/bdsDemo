@@ -197,7 +197,7 @@ var DemoOne = React.createClass({
         console.log(this.state);
         return (
             <div className="container-fluid main">
-                <h1>Demo One</h1>
+                <h1>Business Dynamics Statistics Job Creation</h1>
                 <div className="row">
                     <div className="col-md-12">
                         <DataMap changeSelected={this._changeSelected} geoType={this.state.geoType} changeGeoType={this.changeGeoType} data={this.state.mapData[this.state.geoType]} currYear={this.state.currYear} />
